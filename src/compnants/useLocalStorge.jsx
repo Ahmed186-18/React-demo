@@ -1,46 +1,38 @@
+const useLocalStorage = (key) => {
 
-const useLocalStorge = (key) => {
+    const isBrowser = typeof window !== 'undefined';
 
-    const setItem = (value) =>{
-        try {
-            window.localStorage.setItem(key,JSON.stringify([...getItems(),value]));
-        }
-        catch (error) {
-            console.log(error);
-        }
-
-    }
     const getItems = () => {
-
+        if (!isBrowser) return [];
         try {
-            return JSON.parse(window.localStorage.getItem('cart'));
-        }catch (error) {
+            return JSON.parse(localStorage.getItem(key)) || [];
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    };
+
+    const setItem = (value) => {
+        if (!isBrowser) return;
+        try {
+            const items = getItems();
+            localStorage.setItem(key, JSON.stringify([...items, value]));
+        } catch (error) {
             console.log(error);
         }
-    }
+    };
+
     const deleteItem = (id) => {
-        let found = false;
-
-        const updatedItems = getItems().filter((item) => {
-            if (item.id === id && !found) {
-                found = true;
-                return false;
-            }
-            return true;
-        });
-
-
-        window.localStorage.setItem(key,JSON.stringify(updatedItems));
-    }
+        if (!isBrowser) return;
+        const updatedItems = getItems().filter(item => item.id !== id);
+        localStorage.setItem(key, JSON.stringify(updatedItems));
+    };
 
     const getCartItemsNumber = () => {
-        try{
-            return getItems().length;
-        }catch(error){
-            console.log(error);
-        }
-    }
-    return {getItems,setItem , deleteItem , getCartItemsNumber};
-}
+        return getItems().length;
+    };
 
-export default useLocalStorge;
+    return { getItems, setItem, deleteItem, getCartItemsNumber };
+};
+
+export default useLocalStorage;
