@@ -1,0 +1,39 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.home-btn{
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.cart-page{
+    width: min(1200px,90%);;
+    margin: 50px auto auto;
+}
+
+.cart-container{
+    width: 100%;
+    margin: 20px auto auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+}
+
+.remove-btn{
+    background-color: red;
+    color:white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
