@@ -1,26 +1,28 @@
 import '../App.css'
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import FilterBar from "./FilterBar.jsx";
 import ProductCard from "./ProductCard.jsx";
 import useLocalStorge from "./useLocalStorge.jsx";
 import Loader from "./Loader.jsx";
 
 function Home({onChangePage}) {
-    const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All Products');
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const {getCartItemsNumber,setItem} = useLocalStorge('cart');
 
     useEffect( () =>{
+        setLoading(true)
             const fetchData = async () => {
                 try{
                     const categories = await fetch("https://dummyjson.com/products/category-list");
                     const CategoriesData = await categories.json();
                     setCategories(CategoriesData);
-                    const products = await fetch("https://dummyjson.com/products");
+                    const products = await fetch(`https://dummyjson.com/products${selectedCategory === 'All Products' ? "" : `/category/${selectedCategory}`}`);
                     const productsData = await products.json();
-                    setAllProducts(productsData.products);
+                    console.log(productsData);
+                    setFilteredProducts(productsData.products);
                 }catch (e){
                     console.error(e)
                 } finally {
@@ -28,16 +30,7 @@ function Home({onChangePage}) {
                 }
             }
             fetchData();
-    },[])
-
-    const filteredProducts = useMemo(() => {
-        if (selectedCategory === 'All Products') {
-            return allProducts;
-        }
-        else{
-            return allProducts.filter(product => product.category === selectedCategory);
-        }
-    },[allProducts,selectedCategory])
+    },[selectedCategory])
 
     if (loading){
         return <Loader /> ;

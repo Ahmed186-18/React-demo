@@ -147,6 +147,15 @@ body {
   transition: background-color 0.2s;
 }
 
+.on-cart{
+  background-color: gray;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+}
+
 .add-to-cart-button:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
